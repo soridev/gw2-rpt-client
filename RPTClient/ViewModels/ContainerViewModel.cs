@@ -32,7 +32,7 @@ namespace RPTClient.ViewModels
 
         private void InitializeViewModel()
         {
-            ApplicationTitle = "WPF UI - RPTClient";
+            ApplicationTitle = "GW2 Raid Performance Tracker";
 
             NavigationItems = new ObservableCollection<INavigationControl>
             {
