@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Windows;
 using Wpf.Ui.Mvvm.Contracts;
 
@@ -38,6 +39,6 @@ namespace RPTClient.Services
                 throw new InvalidOperationException("The page should be a WPF control.");
 
             return _serviceProvider.GetService(pageType) as FrameworkElement;
-        }
+        }        
     }
 }

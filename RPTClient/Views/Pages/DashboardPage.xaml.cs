@@ -1,4 +1,5 @@
 ﻿using Wpf.Ui.Common.Interfaces;
+using Wpf.Ui.Mvvm.Contracts;
 
 namespace RPTClient.Views.Pages
 {
@@ -12,11 +13,11 @@ namespace RPTClient.Views.Pages
             get;
         }
 
-        public DashboardPage(ViewModels.DashboardViewModel viewModel)
+        public DashboardPage(ViewModels.DashboardViewModel viewModel, IPageService pageService)
         {
             ViewModel = viewModel;
 
             InitializeComponent();
-        }
+        }        
     }
 }
