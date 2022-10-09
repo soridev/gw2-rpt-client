@@ -11,9 +11,25 @@ using Wpf.Ui.Mvvm.Contracts;
 namespace RPTClient.ViewModels
 {
     public partial class DashboardViewModel : ObservableObject, INavigationAware
-    {        
+    {
+        private bool _isInitialized = false;
+
         [ObservableProperty]
         private string _logRootLocation = String.Empty;
+        private IPageService _pageService;        
+
+        public DashboardViewModel(IPageService pageService)
+        {
+            if (!_isInitialized)
+            {
+                InitializeViewModel();
+            }
+        }
+
+        private void InitializeViewModel()
+        {
+            this._pageService = App.GetService<IPageService>();
+        }
 
         public void OnNavigatedTo()
         {
@@ -21,22 +37,13 @@ namespace RPTClient.ViewModels
 
         public void OnNavigatedFrom()
         {
-        }
-        
-        public void ShowFlyOut()
-        {
-            Flyout flyout = new Flyout();
-            
-        }
+        }         
 
         [ICommand]
         private void OnOpenFileDialog()
-        {
-            OpenFileDialog dialog = new OpenFileDialog();
-            if (dialog.ShowDialog() == true)
-            {
-                LogRootLocation = dialog.FileName;
-            }
+        {                        
+            var pageService = (PageService)_pageService;            
+            this._logRootLocation = pageService.OpenFolderDialog();
         }
     }
 }

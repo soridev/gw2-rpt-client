@@ -2,6 +2,7 @@
 using System;
 using System.Windows;
 using Wpf.Ui.Mvvm.Contracts;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace RPTClient.Services
 {
@@ -40,5 +41,23 @@ namespace RPTClient.Services
 
             return _serviceProvider.GetService(pageType) as FrameworkElement;
         }        
+
+        /// <summary>
+        /// Opens a dialog to select a directory.
+        /// </summary>
+        /// <returns>Full path to selected directory.</returns>
+        public string OpenFolderDialog()
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            string intialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\Guild Wars 2\\addons\\arcdps";
+            dialog.InitialDirectory = intialDirectory;
+            dialog.IsFolderPicker = true;
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                return dialog.FileName;
+            }
+            return String.Empty;
+        }
     }
 }
