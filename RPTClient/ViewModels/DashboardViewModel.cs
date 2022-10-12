@@ -15,8 +15,27 @@ namespace RPTClient.ViewModels
         private bool _isInitialized = false;
 
         [ObservableProperty]
+        private string _remoteLogsCardFooter = String.Empty;
+
+        [ObservableProperty]
+        private string _localLogsCardFooter = String.Empty;
+
+        [ObservableProperty]
+        private string _diffLogsCardFooter = String.Empty;
+
+        [ObservableProperty]
+        private int _remoteLogCounter = 0;
+
+        [ObservableProperty]
+        private int _localLogCounter = 0;
+
+        [ObservableProperty]
+        private int _diffLogCounter = 0;
+
+        [ObservableProperty]
         private string _logRootLocation = String.Empty;
-        private IPageService _pageService;        
+
+        private IPageService _pageService;
 
         public DashboardViewModel(IPageService pageService)
         {
@@ -29,6 +48,10 @@ namespace RPTClient.ViewModels
         private void InitializeViewModel()
         {
             this._pageService = App.GetService<IPageService>();
+
+            RemoteLogsCardFooter = "Remote logs found";
+            LocalLogsCardFooter = "Local logs found";
+            DiffLogsCardFooter = "Unregistered logs";
         }
 
         public void OnNavigatedTo()
@@ -43,7 +66,7 @@ namespace RPTClient.ViewModels
         private void OnOpenFileDialog()
         {                        
             var pageService = (PageService)_pageService;            
-            this._logRootLocation = pageService.OpenFolderDialog();
+            LogRootLocation = pageService.OpenFolderDialog();
         }
     }
 }
