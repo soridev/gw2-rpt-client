@@ -13,54 +13,79 @@
     d:DesignWidth="800"
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
+    
+    <Grid>
+        <Grid Margin="56,0" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="7*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <DockPanel Grid.Column="0" Grid.Row="0">
+                <ui:Button
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,10,0"
+                    Command="{Binding ViewModel.OnOpenFileDialogCommand, Mode=OneWay}"
+                    Content="Path to Log"
+                    Icon="Fluent24" />
 
-    <Grid Margin="56,0" VerticalAlignment="Top">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="2*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
-        <ui:Card Grid.Row="0" Grid.Column="2" Margin="0,0,5,10" BorderBrush="Green" BorderThickness="1">
-            <ui:Card.Content>
-                <TextBlock Text="{Binding ViewModel.RemoteLogCounter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"></TextBlock>
-            </ui:Card.Content>
-            <ui:Card.Footer>
-                <TextBlock Text="{Binding ViewModel.RemoteLogsCardFooter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-            </ui:Card.Footer>
-        </ui:Card>
-        <ui:Card Grid.Row="0" Grid.Column="3" Margin="0,0,5,10" BorderBrush="Cyan" BorderThickness="1">
-            <ui:Card.Content>
-                <TextBlock Text="{Binding ViewModel.LocalLogCounter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"></TextBlock>
-            </ui:Card.Content>
-            <ui:Card.Footer>
-                <TextBlock Text="{Binding ViewModel.LocalLogsCardFooter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-            </ui:Card.Footer>
-        </ui:Card>
-        <ui:Card Grid.Row="0" Grid.Column="4" Margin="0,0,5,10" BorderBrush="OrangeRed"  BorderThickness="1">
-            <ui:Card.Content>
-                <TextBlock Text="{Binding ViewModel.DiffLogCounter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"></TextBlock>
-            </ui:Card.Content>
-            <ui:Card.Footer>
-                <TextBlock Text="{Binding ViewModel.DiffLogsCardFooter}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-            </ui:Card.Footer>
-        </ui:Card>
-        <ui:Button
-            Grid.Row="1"
-            Grid.Column="0"
-            Command="{Binding ViewModel.OnOpenFileDialogCommand, Mode=OneWay}"
-            Content="Path to Log"
-            Icon="Fluent24" />
-        <TextBlock
-            Grid.Column="1"
-            Grid.Row="1"
-            Margin="10,0,-127,0"
-            VerticalAlignment="Center"
-            Text="{Binding ViewModel.LogRootLocation, Mode=OneWay}" />
+                <ui:TextBox 
+                    Grid.Column="0" 
+                    Grid.Row="0" 
+                    VerticalAlignment="Center"
+                    IsReadOnly="False"
+                    PlaceholderText="{Binding ViewModel.LogRootLocationPlaceholder, 
+                    Mode=OneWay}"
+                    Text="{Binding ViewModel.LogRootLocation, Mode=OneWay}">
+                </ui:TextBox>
+            </DockPanel>
+            
+            <ui:Card Grid.Row="0" Grid.Column="1" Margin="0,0,5,10" Width="170" HorizontalAlignment="Right">
+                <ui:Card.Content>
+                    <TextBlock Text="Connected to Server" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                </ui:Card.Content>
+            </ui:Card>
+        </Grid>
+                
+        <Grid Margin="56,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <ui:Card Grid.Row="0" Grid.Column="2" Margin="0,0,5,10" BorderBrush="Green" BorderThickness="1">
+                <ui:Card.Content>
+                    <TextBlock Text="{Binding ViewModel.RemoteLogCounter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"></TextBlock>
+                </ui:Card.Content>
+                <ui:Card.Footer>
+                    <TextBlock Text="{Binding ViewModel.RemoteLogsCardFooter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                </ui:Card.Footer>
+            </ui:Card>
+            <ui:Card Grid.Row="0" Grid.Column="3" Margin="0,0,5,10" BorderBrush="Cyan" BorderThickness="1">
+                <ui:Card.Content>
+                    <TextBlock Text="{Binding ViewModel.LocalLogCounter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"></TextBlock>
+                </ui:Card.Content>
+                <ui:Card.Footer>
+                    <TextBlock Text="{Binding ViewModel.LocalLogsCardFooter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                </ui:Card.Footer>
+            </ui:Card>
+            <ui:Card Grid.Row="0" Grid.Column="4" Margin="0,0,5,10" BorderBrush="OrangeRed"  BorderThickness="1">
+                <ui:Card.Content>
+                    <TextBlock Text="{Binding ViewModel.DiffLogCounter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"></TextBlock>
+                </ui:Card.Content>
+                <ui:Card.Footer>
+                    <TextBlock Text="{Binding ViewModel.DiffLogsCardFooter}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                </ui:Card.Footer>
+            </ui:Card>
+        </Grid>
     </Grid>
 </ui:UiPage>

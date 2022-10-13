@@ -15,6 +15,9 @@ namespace RPTClient.ViewModels
         private bool _isInitialized = false;
 
         [ObservableProperty]
+        private string _logRootLocationPlaceholder = String.Empty;
+
+        [ObservableProperty]
         private string _remoteLogsCardFooter = String.Empty;
 
         [ObservableProperty]
@@ -52,6 +55,7 @@ namespace RPTClient.ViewModels
             RemoteLogsCardFooter = "Remote logs found";
             LocalLogsCardFooter = "Local logs found";
             DiffLogsCardFooter = "Unregistered logs";
+            LogRootLocationPlaceholder = "No log location selected.";
         }
 
         public void OnNavigatedTo()
