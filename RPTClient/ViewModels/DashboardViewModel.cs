@@ -14,6 +14,20 @@ namespace RPTClient.ViewModels
     {
         private bool _isInitialized = false;
 
+        #region properties
+
+        [ObservableProperty]
+        private string _usernamePlaceholder = String.Empty;
+
+        [ObservableProperty]
+        private string _passwordPlaceholder = String.Empty;
+
+        [ObservableProperty]
+        private string _loginButtonText = String.Empty;
+
+        [ObservableProperty]
+        private string _arcFolderButtonText = String.Empty;
+
         [ObservableProperty]
         private string _logRootLocationPlaceholder = String.Empty;
 
@@ -38,6 +52,8 @@ namespace RPTClient.ViewModels
         [ObservableProperty]
         private string _logRootLocation = String.Empty;
 
+        #endregion
+
         private IPageService _pageService;
 
         public DashboardViewModel(IPageService pageService)
@@ -56,6 +72,10 @@ namespace RPTClient.ViewModels
             LocalLogsCardFooter = "Local logs found";
             DiffLogsCardFooter = "Unregistered logs";
             LogRootLocationPlaceholder = "No log location selected.";
+            UsernamePlaceholder = "Username";
+            PasswordPlaceholder = "Password";
+            LoginButtonText = "Login";
+            ArcFolderButtonText = "Select log folder";
         }
 
         public void OnNavigatedTo()
