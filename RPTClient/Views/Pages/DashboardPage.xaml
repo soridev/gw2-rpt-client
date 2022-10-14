@@ -20,8 +20,9 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
         
         <!-- First Grid row definition -->
@@ -62,8 +63,10 @@
                     />
 
                 <ui:TextBox 
-                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
                     IsReadOnly="False"
+                    Width="auto"
+                    MinWidth="300"
                     PlaceholderText="{Binding ViewModel.LogRootLocationPlaceholder, 
                     Mode=OneWay}"
                     Text="{Binding ViewModel.LogRootLocation, Mode=OneWay}">
@@ -72,7 +75,7 @@
         </Grid>
 
         <!-- Second grid row definition -->
-        <Grid Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,30,0,0">
+        <Grid Grid.Row="1" Grid.Column="0" Margin="0,30,0,30">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="2*" />
@@ -84,7 +87,7 @@
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <ui:Card Grid.Row="0" Grid.Column="1" Margin="0,0,5,10" BorderBrush="Green" BorderThickness="1">
+            <ui:Card Grid.Row="0" Grid.Column="1" Margin="0,0,5,10" BorderBrush="{DynamicResource PaletteLightGreenBrush}" BorderThickness="1">
                 <ui:Card.Content>
                     <TextBlock Text="{Binding ViewModel.RemoteLogCounter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"></TextBlock>
                 </ui:Card.Content>
@@ -92,7 +95,7 @@
                     <TextBlock Text="{Binding ViewModel.RemoteLogsCardFooter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                 </ui:Card.Footer>
             </ui:Card>
-            <ui:Card Grid.Row="0" Grid.Column="2" Margin="0,0,5,10" BorderBrush="Cyan" BorderThickness="1">
+            <ui:Card Grid.Row="0" Grid.Column="2" Margin="0,0,5,10" BorderBrush="{DynamicResource PaletteLightBlueBrush}" BorderThickness="1">
                 <ui:Card.Content>
                     <TextBlock Text="{Binding ViewModel.LocalLogCounter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"></TextBlock>
                 </ui:Card.Content>
@@ -100,7 +103,7 @@
                     <TextBlock Text="{Binding ViewModel.LocalLogsCardFooter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                 </ui:Card.Footer>
             </ui:Card>
-            <ui:Card Grid.Row="0" Grid.Column="3" Margin="0,0,5,10" BorderBrush="OrangeRed"  BorderThickness="1">
+            <ui:Card Grid.Row="0" Grid.Column="3" Margin="0,0,5,10" BorderBrush="{DynamicResource PaletteRedBrush}"  BorderThickness="1">
                 <ui:Card.Content>
                     <TextBlock Text="{Binding ViewModel.DiffLogCounter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"></TextBlock>
                 </ui:Card.Content>
@@ -108,6 +111,72 @@
                     <TextBlock Text="{Binding ViewModel.DiffLogsCardFooter}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                 </ui:Card.Footer>
             </ui:Card>
+        </Grid>
+        
+        <!-- Row three -->
+        <Grid Grid.Row="2" Grid.Column="0" Margin="12,0,12,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <ui:CardAction
+                Grid.Row="0"
+                Grid.Column="0"
+                Margin="0,0,4,0"
+                Icon="BoxSearch24">
+                <StackPanel>
+                    <TextBlock
+                        Margin="0"
+                        FontSize="13"
+                        FontWeight="Medium"
+                        Text="Log settings" />
+                    <TextBlock
+                        FontSize="12"
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                        Text="Configure relevant logs" />
+                </StackPanel>
+            </ui:CardAction>
+
+            <ui:CardAction
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="4,0,4,0"
+                Icon="DatabaseSearch24">
+                <StackPanel>
+                    <TextBlock
+                        Margin="0"
+                        FontSize="13"
+                        FontWeight="Medium"
+                        Text="Log repository" />
+                    <TextBlock
+                        FontSize="12"
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                        Text="Browse the local logs" />
+                </StackPanel>
+            </ui:CardAction>
+            
+            <ui:CardAction
+                Grid.Row="0"
+                Grid.Column="2"
+                Margin="4,0,0,0"
+                Icon="Settings24">
+                <StackPanel>
+                    <TextBlock
+                        Margin="0"
+                        FontSize="13"
+                        FontWeight="Medium"
+                        Text="Settings" />
+                    <TextBlock
+                        FontSize="12"
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                        Text="App specific settings" />
+                </StackPanel>
+            </ui:CardAction>
         </Grid>
     </Grid>
 </ui:UiPage>

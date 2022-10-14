@@ -38,7 +38,7 @@ namespace RPTClient.ViewModels
             {
                 new NavigationItem()
                 {
-                    Content = "Overview",
+                    Content = "Home",
                     PageTag = "dashboard",
                     Icon = SymbolRegular.Home24,
                     PageType = typeof(Views.Pages.DashboardPage)
