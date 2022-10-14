@@ -49,7 +49,7 @@ namespace RPTClient.Services
         public string OpenFolderDialog()
         {
             CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-            string intialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\Guild Wars 2\\addons\\arcdps";
+            string intialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\Guild Wars 2\\addons\\arcdps\\arcdps.cbtlogs";
             dialog.InitialDirectory = intialDirectory;
             dialog.IsFolderPicker = true;
 
