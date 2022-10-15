@@ -1,6 +1,6 @@
 # gw2-rpt-client
 
-gw2-rpt-client is a client written for the windows platform to automatically upload and manage your data inside the [gw2-raid-performance-tracker](https://github.com/soridev/gw2-raid-performance-tracker)
+This client is used to auto-upload and manage your data inside the [gw2-raid-performance-tracker](https://github.com/soridev/gw2-raid-performance-tracker)
 
 ## Installation
 
