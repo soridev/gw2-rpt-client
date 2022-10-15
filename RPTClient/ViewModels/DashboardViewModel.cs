@@ -3,6 +3,7 @@ using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Win32;
 using RPTClient.Models;
 using RPTClient.Services;
+using RPTClient.Services.Contracts;
 using System;
 using Wpf.Ui.Common.Interfaces;
 using Wpf.Ui.Controls;
@@ -54,10 +55,18 @@ namespace RPTClient.ViewModels
 
         #endregion
 
+        #region services
+
         private IPageService _pageService;
+        private ILogDialogService _logDialogService;
+
+        #endregion
 
         public DashboardViewModel(IPageService pageService)
         {
+            _pageService = pageService;
+            _logDialogService = new LogDialogService();
+
             if (!_isInitialized)
             {
                 InitializeViewModel();
@@ -66,8 +75,6 @@ namespace RPTClient.ViewModels
 
         private void InitializeViewModel()
         {
-            this._pageService = App.GetService<IPageService>();
-
             RemoteLogsCardFooter = "Remote logs found";
             LocalLogsCardFooter = "Local logs found";
             DiffLogsCardFooter = "Unregistered logs";
@@ -88,9 +95,8 @@ namespace RPTClient.ViewModels
 
         [ICommand]
         private void OnOpenFileDialog()
-        {                        
-            var pageService = (PageService)_pageService;            
-            LogRootLocation = pageService.OpenFolderDialog();
+        {
+            LogRootLocation = _logDialogService.OpenArcFolderDialog();
         }
     }
 }

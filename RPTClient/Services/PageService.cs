@@ -40,24 +40,6 @@ namespace RPTClient.Services
                 throw new InvalidOperationException("The page should be a WPF control.");
 
             return _serviceProvider.GetService(pageType) as FrameworkElement;
-        }        
-
-        /// <summary>
-        /// Opens a dialog to select a directory.
-        /// </summary>
-        /// <returns>Full path to selected directory.</returns>
-        public string OpenFolderDialog()
-        {
-            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-            string intialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Documents\\Guild Wars 2\\addons\\arcdps\\arcdps.cbtlogs";
-            dialog.InitialDirectory = intialDirectory;
-            dialog.IsFolderPicker = true;
-
-            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-            {
-                return dialog.FileName;
-            }
-            return String.Empty;
         }
     }
 }
