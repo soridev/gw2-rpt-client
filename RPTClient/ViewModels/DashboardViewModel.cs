@@ -2,6 +2,7 @@
 using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Win32;
 using RPTClient.Models;
+using RPTClient.Repositories;
 using RPTClient.Services;
 using RPTClient.Services.Contracts;
 using System;
@@ -42,7 +43,7 @@ namespace RPTClient.ViewModels
         private string _diffLogsCardFooter = String.Empty;
 
         [ObservableProperty]
-        private int _remoteLogCounter = 0;
+        private int _remoteLogCounter;
 
         [ObservableProperty]
         private int _localLogCounter = 0;
@@ -62,10 +63,13 @@ namespace RPTClient.ViewModels
 
         #endregion
 
+        private PerformanceTrackerRepository _performanceTrackerRepo;
+
         public DashboardViewModel(IPageService pageService)
         {
             _pageService = pageService;
             _logDialogService = new LogDialogService();
+            _performanceTrackerRepo = new PerformanceTrackerRepository();
 
             if (!_isInitialized)
             {
@@ -75,6 +79,7 @@ namespace RPTClient.ViewModels
 
         private void InitializeViewModel()
         {
+            // set labels to frontend components
             RemoteLogsCardFooter = "Remote logs found";
             LocalLogsCardFooter = "Local logs found";
             DiffLogsCardFooter = "Unregistered logs";
@@ -83,6 +88,9 @@ namespace RPTClient.ViewModels
             PasswordPlaceholder = "Password";
             LoginButtonText = "Login";
             ArcFolderButtonText = "Select log folder";
+
+            // bind data from remote services through repository
+            
         }
 
         public void OnNavigatedTo()
@@ -96,7 +104,15 @@ namespace RPTClient.ViewModels
         [ICommand]
         private void OnOpenFileDialog()
         {
-            LogRootLocation = _logDialogService.OpenArcFolderDialog();
+            try
+            {
+                LogRootLocation = _logDialogService.OpenArcFolderDialog();
+            }
+            catch(Exception e){
+                MessageBox box = new MessageBox();
+                box.Content = e.ToString();
+                box.Show();
+            }
         }
     }
 }
