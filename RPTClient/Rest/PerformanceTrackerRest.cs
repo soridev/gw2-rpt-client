@@ -22,25 +22,35 @@ namespace RPTClient.Rest;
 public sealed class PerformanceTrackerRest
 {
     private static readonly Lazy<PerformanceTrackerRest> lazy = new Lazy<PerformanceTrackerRest>(() => new PerformanceTrackerRest());
+    private bool _isInitialized = false;
     private UserToken _accessToken = new UserToken();
+    private string _username;
     private readonly HttpClient client = new HttpClient();
 
     public static PerformanceTrackerRest Instance { get { return lazy.Value; } }
 
     private PerformanceTrackerRest()
     {
-        Setup();
+
     }
 
-    public async void Setup()
+    public void Setup(string username, string password)
     {
         client.BaseAddress = new Uri("http://localhost:8443/elite-api/");
         client.DefaultRequestHeaders.Accept.Clear();
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        _accessToken.AccessToken(await GetToken("daniel", "elite-insider"));
+
+        // fetch access token
+        var task = Task.Run(async () => await ConfigureToken(username, password));
+        task.Wait();
+        _accessToken.AccessToken(task.Result);
+
+        _username = username;
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", _accessToken.AccessToken());
+        _isInitialized = true;
     }
 
-    private async Task<string> GetToken(string username, string password)
+    private async Task<string> ConfigureToken(string username, string password)
     {
         var values = new Dictionary<string, string>()
         {
@@ -58,5 +68,26 @@ public sealed class PerformanceTrackerRest
 
         
         return data.token;
+    }
+
+    public async Task<int> GetRemoteLogCount()
+    {
+        CheckSelf();
+
+        HttpResponseMessage response = await client.GetAsync("log-count/me/");
+        response.EnsureSuccessStatusCode();
+
+        string responseJson = await response.Content.ReadAsStringAsync();
+        dynamic data = JObject.Parse(responseJson);
+
+        return Convert.ToInt32(data.log_count);
+    }
+
+    private void CheckSelf()
+    {
+        if (_isInitialized is false)
+        {
+            throw new Exception("Rest api is not initialized. Call method Setup() before using any other calls.");
+        }
     }
 }
