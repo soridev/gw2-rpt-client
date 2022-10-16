@@ -39,16 +39,19 @@
 
             <DockPanel Grid.Row="0" Grid.Column="0">
                 <ui:TextBox 
+                    Text="{Binding ViewModel.UsernameValue, Mode=TwoWay}"
                     PlaceholderText="{Binding ViewModel.UsernamePlaceholder, Mode=OneWay}"
                     MinWidth="150"
                     Margin="0,0,10,0">
                 </ui:TextBox>
-                <ui:PasswordBox
+                <PasswordBox
                     Margin="0,0,10,0"
                     MinWidth="150"
-                    PlaceholderText="{Binding ViewModel.PasswordPlaceholder, Mode=OneWay}"></ui:PasswordBox>
+                    PasswordChanged="PasswordBox_PasswordChanged"
+                />
                 <ui:Button 
                     Content="{Binding ViewModel.LoginButtonText, Mode=OneWay}"
+                    Command="{Binding ViewModel.OnLoginCommand, Mode=OneWay}"
                     VerticalAlignment="Stretch">
                 </ui:Button>
             </DockPanel>

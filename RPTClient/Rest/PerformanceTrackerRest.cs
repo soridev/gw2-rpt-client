@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime;
+using System.Security;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -21,20 +22,17 @@ namespace RPTClient.Rest;
 /// </summary>
 public sealed class PerformanceTrackerRest
 {
-    private static readonly Lazy<PerformanceTrackerRest> lazy = new Lazy<PerformanceTrackerRest>(() => new PerformanceTrackerRest());
     private bool _isInitialized = false;
     private UserToken _accessToken = new UserToken();
-    private string _username;
+    private string _username = string.Empty;
     private readonly HttpClient client = new HttpClient();
 
-    public static PerformanceTrackerRest Instance { get { return lazy.Value; } }
-
-    private PerformanceTrackerRest()
+    public PerformanceTrackerRest()
     {
-
+        
     }
 
-    public void Setup(string username, string password)
+    public void Login(string username, string password)
     {
         client.BaseAddress = new Uri("http://localhost:8443/elite-api/");
         client.DefaultRequestHeaders.Accept.Clear();
@@ -56,7 +54,7 @@ public sealed class PerformanceTrackerRest
         {
             {"username", username},
             {"password", password},
-        };
+        }; 
 
         var content = new FormUrlEncodedContent(values);
 

@@ -1,4 +1,6 @@
-﻿using Wpf.Ui.Common.Interfaces;
+﻿using System.Windows.Controls;
+using Wpf.Ui.Common.Interfaces;
+using Wpf.Ui.Controls;
 using Wpf.Ui.Mvvm.Contracts;
 
 namespace RPTClient.Views.Pages
@@ -18,6 +20,11 @@ namespace RPTClient.Views.Pages
             ViewModel = viewModel;
 
             InitializeComponent();
-        }        
+        }
+
+        private void PasswordBox_PasswordChanged(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ViewModel.SetPasswordValue(((System.Windows.Controls.PasswordBox)sender).Password);
+        }
     }
 }

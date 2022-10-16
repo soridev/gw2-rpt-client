@@ -6,6 +6,8 @@ using RPTClient.Repositories;
 using RPTClient.Services;
 using RPTClient.Services.Contracts;
 using System;
+using System.Diagnostics;
+using System.Security;
 using Wpf.Ui.Common.Interfaces;
 using Wpf.Ui.Controls;
 using Wpf.Ui.Mvvm.Contracts;
@@ -22,7 +24,12 @@ namespace RPTClient.ViewModels
         private string _usernamePlaceholder = String.Empty;
 
         [ObservableProperty]
+        private string _usernameValue = String.Empty;
+
+        [ObservableProperty]
         private string _passwordPlaceholder = String.Empty;
+
+        private string _passwordValue = String.Empty;
 
         [ObservableProperty]
         private string _loginButtonText = String.Empty;
@@ -88,9 +95,6 @@ namespace RPTClient.ViewModels
             PasswordPlaceholder = "Password";
             LoginButtonText = "Login";
             ArcFolderButtonText = "Select log folder";
-
-            // bind data from remote services through repository
-            
         }
 
         public void OnNavigatedTo()
@@ -100,6 +104,11 @@ namespace RPTClient.ViewModels
         public void OnNavigatedFrom()
         {
         }         
+
+        public void SetPasswordValue(string value)
+        {
+            _passwordValue = value;
+        }
 
         [ICommand]
         private void OnOpenFileDialog()
@@ -113,6 +122,15 @@ namespace RPTClient.ViewModels
                 box.Content = e.ToString();
                 box.Show();
             }
+        }
+
+        [ICommand]
+        private void OnLogin()
+        {
+            _performanceTrackerRepo.Login(UsernameValue, _passwordValue);
+            RemoteLogCounter = _performanceTrackerRepo.GetRemoteLogCount();
+
+            _passwordValue = string.Empty;
         }
     }
 }
