@@ -8,8 +8,11 @@ using RPTClient.Services.Contracts;
 using System;
 using System.Diagnostics;
 using System.Security;
+using System.Windows;
+using Wpf.Ui.Common;
 using Wpf.Ui.Common.Interfaces;
 using Wpf.Ui.Controls;
+using Wpf.Ui.Controls.Interfaces;
 using Wpf.Ui.Mvvm.Contracts;
 
 namespace RPTClient.ViewModels
@@ -61,27 +64,39 @@ namespace RPTClient.ViewModels
         [ObservableProperty]
         private string _logRootLocation = String.Empty;
 
+        [ObservableProperty]
+        private Visibility _loginBarVisibility = Visibility.Visible;
+
         #endregion
 
         #region services
 
         private IPageService _pageService;
+        private ISnackbarService _snackbarService;
         private ILogDialogService _logDialogService;
+
+        #endregion
+
+        #region controls
+
+        private IDialogControl _dialogControl;
 
         #endregion
 
         private PerformanceTrackerRepository _performanceTrackerRepo;
 
-        public DashboardViewModel(IPageService pageService)
+        public DashboardViewModel(IPageService pageService, ISnackbarService snackbarService, IDialogService dialogService)
         {
-            _pageService = pageService;
-            _logDialogService = new LogDialogService();
-            _performanceTrackerRepo = new PerformanceTrackerRepository();
-
             if (!_isInitialized)
             {
                 InitializeViewModel();
             }
+
+            _pageService = pageService;
+            _snackbarService = snackbarService;
+            _dialogControl = dialogService.GetDialogControl();
+            _logDialogService = new LogDialogService();
+            _performanceTrackerRepo = new PerformanceTrackerRepository();            
         }
 
         private void InitializeViewModel()
@@ -99,15 +114,31 @@ namespace RPTClient.ViewModels
 
         public void OnNavigatedTo()
         {
+            _dialogControl.ButtonRightClick += DialogControlOnButtonRightClick;
+            _dialogControl.ButtonLeftClick += DialogControlOnButtonLeftClick;
         }
 
         public void OnNavigatedFrom()
         {
-        }         
+            _dialogControl.ButtonRightClick -= DialogControlOnButtonRightClick;
+            _dialogControl.ButtonLeftClick -= DialogControlOnButtonLeftClick;
+        }
 
         public void SetPasswordValue(string value)
         {
             _passwordValue = value;
+        }
+
+        private static void DialogControlOnButtonRightClick(object sender, RoutedEventArgs e)
+        {
+            var dialogControl = (IDialogControl)sender;
+            dialogControl.Hide();
+        }
+
+        private static void DialogControlOnButtonLeftClick(object sender, RoutedEventArgs e)
+        {
+            var dialogControl = (IDialogControl)sender;
+            System.Windows.Clipboard.SetText(dialogControl.Message);
         }
 
         [ICommand]
@@ -118,19 +149,32 @@ namespace RPTClient.ViewModels
                 LogRootLocation = _logDialogService.OpenArcFolderDialog();
             }
             catch(Exception e){
-                MessageBox box = new MessageBox();
-                box.Content = e.ToString();
-                box.Show();
+                _dialogControl.Show("Error", "An error occurred while trying to set the arc folder path:\n" + e.ToString());
             }
         }
 
         [ICommand]
-        private void OnLogin()
+        private async void OnLogin()
         {
-            _performanceTrackerRepo.Login(UsernameValue, _passwordValue);
-            RemoteLogCounter = _performanceTrackerRepo.GetRemoteLogCount();
+            try
+            {
+                // Do an async login request to the server.
+                _performanceTrackerRepo.Login(UsernameValue, _passwordValue);
+                _passwordValue = string.Empty;
 
-            _passwordValue = string.Empty;
+                // Show notification about successful login.
+                _snackbarService.Show("Login Service", "Successfully logged in.", SymbolRegular.AccessibilityCheckmark24);
+                
+                // Hide login UI elements. Show UI elements about connection to server.
+                LoginBarVisibility = Visibility.Collapsed;
+
+                var task = _performanceTrackerRepo.GetRemoteLogCount();
+                RemoteLogCounter = await task;
+            }
+            catch (Exception e)
+            {
+                _dialogControl.Show("Error", "An error occurred while trying to log you in:\n" + e.ToString());
+            }
         }
     }
 }

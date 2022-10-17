@@ -37,7 +37,8 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
-            <DockPanel Grid.Row="0" Grid.Column="0">
+            <!-- Login Panel -->
+            <DockPanel Grid.Row="0" Grid.Column="0" Visibility="{Binding ViewModel.LoginBarVisibility, Mode=OneWay}">
                 <ui:TextBox 
                     Text="{Binding ViewModel.UsernameValue, Mode=TwoWay}"
                     PlaceholderText="{Binding ViewModel.UsernamePlaceholder, Mode=OneWay}"
@@ -55,6 +56,8 @@
                     VerticalAlignment="Stretch">
                 </ui:Button>
             </DockPanel>
+            
+            <!-- Connection Status Panel -->
 
             <DockPanel Grid.Row="1" Grid.Column="0" Margin="0,10,0,0">
                 <ui:Button
@@ -137,7 +140,7 @@
                         Margin="0"
                         FontSize="13"
                         FontWeight="Medium"
-                        Text="Log settings" />
+                        Text="Log configuration" />
                     <TextBlock
                         FontSize="12"
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"

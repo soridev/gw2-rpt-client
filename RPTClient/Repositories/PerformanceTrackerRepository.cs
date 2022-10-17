@@ -23,11 +23,8 @@ public class PerformanceTrackerRepository
         _performanceTrackerRest.Login(username, password);
     }
 
-    public int GetRemoteLogCount()
+    public Task<int> GetRemoteLogCount()
     {
-        var task = Task.Run(async () => await _performanceTrackerRest.GetRemoteLogCount());
-        task.Wait();
-
-        return task.Result;
+        return _performanceTrackerRest.GetRemoteLogCount();
     }
 }

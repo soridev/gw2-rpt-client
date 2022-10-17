@@ -15,7 +15,7 @@ namespace RPTClient.Views.Pages
             get;
         }
 
-        public DashboardPage(ViewModels.DashboardViewModel viewModel, IPageService pageService)
+        public DashboardPage(ViewModels.DashboardViewModel viewModel, IPageService pageService, ISnackbarService snackbarService, IDialogService dialogService)
         {
             ViewModel = viewModel;
 
