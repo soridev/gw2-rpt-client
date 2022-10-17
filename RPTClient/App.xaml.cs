@@ -33,6 +33,12 @@ namespace RPTClient
                 // Page resolver service
                 services.AddSingleton<IPageService, PageService>();
 
+                // Snackbar service
+                services.AddSingleton<ISnackbarService, SnackbarService>();
+
+                // Dialog service
+                services.AddSingleton<IDialogService, DialogService>();
+
                 // Theme manipulation
                 services.AddSingleton<IThemeService, ThemeService>();
 

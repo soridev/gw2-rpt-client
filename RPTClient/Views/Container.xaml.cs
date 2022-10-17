@@ -16,7 +16,7 @@ namespace RPTClient.Views
             get;
         }
 
-        public Container(ViewModels.ContainerViewModel viewModel, IPageService pageService, INavigationService navigationService)
+        public Container(ViewModels.ContainerViewModel viewModel, IPageService pageService, INavigationService navigationService, ISnackbarService snackbarService, IDialogService dialogService)
         {
             ViewModel = viewModel;
             DataContext = this;
@@ -25,6 +25,12 @@ namespace RPTClient.Views
             SetPageService(pageService);
 
             navigationService.SetNavigationControl(RootNavigation);
+
+            // Allows you to use the Snackbar control defined in this window in other pages or windows
+            snackbarService.SetSnackbarControl(RootSnackbar);
+
+            // Allows you to use the Dialog control defined in this window in other pages or windows
+            dialogService.SetDialogControl(RootDialog);
         }
 
         #region INavigationWindow methods
