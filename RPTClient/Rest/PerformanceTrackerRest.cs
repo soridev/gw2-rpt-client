@@ -22,22 +22,20 @@ namespace RPTClient.Rest;
 /// </summary>
 public sealed class PerformanceTrackerRest
 {
-    private bool _isInitialized = false;
+    private bool _isLogedIn = false;
     private UserToken _accessToken = new UserToken();
     private string _username = string.Empty;
     private readonly HttpClient client = new HttpClient();
 
     public PerformanceTrackerRest()
     {
-        
+        client.BaseAddress = new Uri("http://localhost:8443/elite-api/");
+        client.DefaultRequestHeaders.Accept.Clear();
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
 
     public void Login(string username, string password)
     {
-        client.BaseAddress = new Uri("http://localhost:8443/elite-api/");
-        client.DefaultRequestHeaders.Accept.Clear();
-        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
         // fetch access token
         var task = Task.Run(async () => await ConfigureToken(username, password));
         task.Wait();
@@ -45,7 +43,8 @@ public sealed class PerformanceTrackerRest
 
         _username = username;
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", _accessToken.AccessToken());
-        _isInitialized = true;
+
+        _isLogedIn = true;
     }
 
     private async Task<string> ConfigureToken(string username, string password)
@@ -83,9 +82,9 @@ public sealed class PerformanceTrackerRest
 
     private void CheckSelf()
     {
-        if (_isInitialized is false)
+        if (_isLogedIn is false)
         {
-            throw new Exception("Rest api is not initialized. Call method Setup() before using any other calls.");
+            throw new Exception("Rest api is not authenticated. Call method Login() before using any other calls.");
         }
     }
 }
