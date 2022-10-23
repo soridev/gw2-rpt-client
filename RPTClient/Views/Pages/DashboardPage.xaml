@@ -61,12 +61,12 @@
             <DockPanel Grid.Row="0" Grid.Column="0" Visibility="{Binding ViewModel.UploadAgentBarVisibility}">
                 <ui:Card Margin="0,0,10,0" Width="{Binding Path=ActualWidth, ElementName=btnLogLocation}">
                     <ui:Card.Content>
-                        <TextBlock FontWeight="Bold" Foreground="{DynamicResource PaletteLightGreenBrush}" Text="API Status: Online"></TextBlock>
+                        <TextBlock FontWeight="Bold" Foreground="{DynamicResource PaletteLightGreenBrush}" Text="{Binding ViewModel.ApiStatusText, Mode=OneWay}"></TextBlock>
                     </ui:Card.Content>
                 </ui:Card>
                 <ui:Button 
                     FontWeight="Bold"
-                    Content="Start Uploading"
+                    Content="{Binding ViewModel.UploadButtonText}"
                     Command="{Binding ViewModel.OnUploadCommand, Mode=OneWay}"
                     VerticalAlignment="Stretch">
                 </ui:Button>
