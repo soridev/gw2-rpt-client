@@ -7,6 +7,7 @@ using RPTClient.Services;
 using RPTClient.Services.Contracts;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Security;
 using System.Windows;
 using Wpf.Ui.Common;
@@ -65,7 +66,18 @@ namespace RPTClient.ViewModels
         private string _logRootLocation = String.Empty;
 
         [ObservableProperty]
+        private string _apiStatusText = String.Empty;
+
+        [ObservableProperty]
+        private string _uploadButtonText = String.Empty;
+
+        [ObservableProperty]
         private Visibility _loginBarVisibility = Visibility.Visible;
+
+        [ObservableProperty]
+        private Visibility _uploadAgentBarVisibility = Visibility.Collapsed;
+
+        private bool _uploadOn = false;
 
         #endregion
 
@@ -110,6 +122,8 @@ namespace RPTClient.ViewModels
             PasswordPlaceholder = "Password";
             LoginButtonText = "Login";
             ArcFolderButtonText = "Select log folder";
+            ApiStatusText = "API Status: Offline";
+            UploadButtonText = "Start Uploading";
         }
 
         public void OnNavigatedTo()
@@ -167,6 +181,7 @@ namespace RPTClient.ViewModels
                 
                 // Hide login UI elements. Show UI elements about connection to server.
                 LoginBarVisibility = Visibility.Collapsed;
+                UploadAgentBarVisibility = Visibility.Visible;
 
                 var task = _performanceTrackerRepo.GetRemoteLogCount();
                 RemoteLogCounter = await task;
@@ -175,6 +190,27 @@ namespace RPTClient.ViewModels
             {
                 _dialogControl.Show("Error", "An error occurred while trying to log you in:\n" + e.ToString());
             }
+        }
+
+        [ICommand]
+        private void OnUpload()
+        {
+            if(_logRootLocation == String.Empty)
+            {
+                _snackbarService.Show("Upload Service", "You need to specify your local arcdps log directory.", SymbolRegular.ErrorCircle24);
+                return;
+            }
+            else if (!Directory.Exists(_logRootLocation))
+            {
+                _snackbarService.Show("Upload Service", "Your specified arcdps log directory does not exits.", SymbolRegular.ErrorCircle24);
+                return;
+            }
+
+            _performanceTrackerRepo.StartFSWatcher(_logRootLocation);
+            _uploadOn = true;
+            _uploadButtonText = "Stop Uploading";
+
+            _snackbarService.Show("Upload Service", "Starting to monitoring changes in your log directory.", SymbolRegular.Eye24);
         }
     }
 }

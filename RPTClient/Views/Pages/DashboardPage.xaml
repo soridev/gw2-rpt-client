@@ -58,10 +58,23 @@
             </DockPanel>
             
             <!-- Connection Status Panel -->
-            
+            <DockPanel Grid.Row="0" Grid.Column="0" Visibility="{Binding ViewModel.UploadAgentBarVisibility}">
+                <ui:Card Margin="0,0,10,0" Width="{Binding Path=ActualWidth, ElementName=btnLogLocation}">
+                    <ui:Card.Content>
+                        <TextBlock FontWeight="Bold" Foreground="{DynamicResource PaletteLightGreenBrush}" Text="API Status: Online"></TextBlock>
+                    </ui:Card.Content>
+                </ui:Card>
+                <ui:Button 
+                    FontWeight="Bold"
+                    Content="Start Uploading"
+                    Command="{Binding ViewModel.OnUploadCommand, Mode=OneWay}"
+                    VerticalAlignment="Stretch">
+                </ui:Button>
+            </DockPanel>
 
             <DockPanel Grid.Row="1" Grid.Column="0" Margin="0,10,0,0">
                 <ui:Button
+                    x:Name="btnLogLocation"
                     Margin="0,0,10,0"
                     Command="{Binding ViewModel.OnOpenFileDialogCommand, Mode=OneWay}"
                     Content="{Binding ViewModel.ArcFolderButtonText, Mode=OneWay}"

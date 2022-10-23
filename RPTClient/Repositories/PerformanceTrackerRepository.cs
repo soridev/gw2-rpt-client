@@ -1,7 +1,9 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+using RPTClient.Filesystem;
 using RPTClient.Rest;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security;
 using System.Text;
@@ -12,6 +14,7 @@ namespace RPTClient.Repositories;
 public class PerformanceTrackerRepository
 {
     private PerformanceTrackerRest _performanceTrackerRest;
+    private ArcFileSystemWatcher? _arcFileSystemWatcher;
 
     public PerformanceTrackerRepository()
     {
@@ -26,5 +29,11 @@ public class PerformanceTrackerRepository
     public Task<int> GetRemoteLogCount()
     {
         return _performanceTrackerRest.GetRemoteLogCount();
+    }
+
+    public void StartFSWatcher(string rootLogLocation)
+    {
+        _arcFileSystemWatcher = new ArcFileSystemWatcher(rootLogLocation, true, _performanceTrackerRest);
+        _arcFileSystemWatcher.StartFilesystemWatcher();
     }
 }

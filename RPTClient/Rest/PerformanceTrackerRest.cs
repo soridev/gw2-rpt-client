@@ -2,10 +2,12 @@
 using Newtonsoft.Json.Linq;
 using RPTClient.Models;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime;
@@ -86,5 +88,22 @@ public sealed class PerformanceTrackerRest
         {
             throw new Exception("Rest api is not authenticated. Call method Login() before using any other calls.");
         }
+    }
+
+    public async Task Upload(string pathToFile)
+    {
+        string filename = Path.GetFileName(pathToFile);
+
+        await using var stream = System.IO.File.OpenRead(pathToFile);
+        using var request = new HttpRequestMessage(HttpMethod.Post, "upload/");
+        using var content = new MultipartFormDataContent
+        {
+            {new StreamContent(stream), "file", filename }
+        };
+
+        request.Content = content;
+        
+        HttpResponseMessage response =  await client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
     }
 }
