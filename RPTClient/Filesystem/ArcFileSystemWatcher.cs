@@ -57,6 +57,7 @@ public class ArcFileSystemWatcher
         if (_fsWatcher != null)
         {
             _fsWatcher.EnableRaisingEvents = false;
+            _fsWatcher.Dispose();
         }
     }
 
