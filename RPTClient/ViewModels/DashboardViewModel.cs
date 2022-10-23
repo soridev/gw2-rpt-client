@@ -204,6 +204,7 @@ namespace RPTClient.ViewModels
                 UploadButtonText = "Start Uploading";
                 _snackbarService.Show("Upload Service", "Stopped to monitoring changes in your log directory.", SymbolRegular.Eye24);
 
+                return;
             }
 
             if(_logRootLocation == String.Empty)
