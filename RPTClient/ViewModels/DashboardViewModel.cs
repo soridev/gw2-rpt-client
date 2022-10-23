@@ -122,7 +122,7 @@ namespace RPTClient.ViewModels
             PasswordPlaceholder = "Password";
             LoginButtonText = "Login";
             ArcFolderButtonText = "Select log folder";
-            ApiStatusText = "API Status: Offline";
+            ApiStatusText = "Disconnected";
             UploadButtonText = "Start Uploading";
         }
 
@@ -177,6 +177,7 @@ namespace RPTClient.ViewModels
                 _passwordValue = string.Empty;
 
                 // Show notification about successful login.
+                ApiStatusText = "Connected";
                 _snackbarService.Show("Login Service", "Successfully logged in.", SymbolRegular.AccessibilityCheckmark24);
                 
                 // Hide login UI elements. Show UI elements about connection to server.
@@ -195,6 +196,16 @@ namespace RPTClient.ViewModels
         [ICommand]
         private void OnUpload()
         {
+            if(_uploadOn)
+            {
+                _performanceTrackerRepo.StopFSWatcher();
+                _uploadOn = false;
+
+                UploadButtonText = "Start Uploading";
+                _snackbarService.Show("Upload Service", "Stopped to monitoring changes in your log directory.", SymbolRegular.Eye24);
+
+            }
+
             if(_logRootLocation == String.Empty)
             {
                 _snackbarService.Show("Upload Service", "You need to specify your local arcdps log directory.", SymbolRegular.ErrorCircle24);
@@ -208,7 +219,7 @@ namespace RPTClient.ViewModels
 
             _performanceTrackerRepo.StartFSWatcher(_logRootLocation);
             _uploadOn = true;
-            _uploadButtonText = "Stop Uploading";
+            UploadButtonText = "Stop Uploading";
 
             _snackbarService.Show("Upload Service", "Starting to monitoring changes in your log directory.", SymbolRegular.Eye24);
         }

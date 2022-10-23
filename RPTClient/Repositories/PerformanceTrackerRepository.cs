@@ -36,4 +36,9 @@ public class PerformanceTrackerRepository
         _arcFileSystemWatcher = new ArcFileSystemWatcher(rootLogLocation, true, _performanceTrackerRest);
         _arcFileSystemWatcher.StartFilesystemWatcher();
     }
+
+    public void StopFSWatcher()
+    {
+        _arcFileSystemWatcher.StopFilesystemWatcher();
+    }
 }

@@ -52,6 +52,14 @@ public class ArcFileSystemWatcher
         _fsWatcher.EnableRaisingEvents = true;
     }
 
+    public void StopFilesystemWatcher()
+    {
+        if (_fsWatcher != null)
+        {
+            _fsWatcher.EnableRaisingEvents = false;
+        }
+    }
+
     private void OnChanged(object sender, FileSystemEventArgs e)
     {
         // not needed atm.
