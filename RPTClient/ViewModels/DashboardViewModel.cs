@@ -77,6 +77,8 @@ namespace RPTClient.ViewModels
         [ObservableProperty]
         private Visibility _uploadAgentBarVisibility = Visibility.Collapsed;
 
+        private UserSettings _userSettings = new UserSettings();
+
         private bool _uploadOn = false;
 
         #endregion
@@ -86,7 +88,7 @@ namespace RPTClient.ViewModels
         private IPageService _pageService;
         private ISnackbarService _snackbarService;
         private ILogDialogService _logDialogService;
-
+        private ISettingsService _settingsService;
         #endregion
 
         #region controls
@@ -99,8 +101,10 @@ namespace RPTClient.ViewModels
 
         public DashboardViewModel(IPageService pageService, ISnackbarService snackbarService, IDialogService dialogService)
         {
+            _settingsService = new SettingsService();
             if (!_isInitialized)
             {
+                InitializeSettings();
                 InitializeViewModel();
             }
 
@@ -108,7 +112,7 @@ namespace RPTClient.ViewModels
             _snackbarService = snackbarService;
             _dialogControl = dialogService.GetDialogControl();
             _logDialogService = new LogDialogService();
-            _performanceTrackerRepo = new PerformanceTrackerRepository();            
+            _performanceTrackerRepo = new PerformanceTrackerRepository();
         }
 
         private void InitializeViewModel()
@@ -117,13 +121,29 @@ namespace RPTClient.ViewModels
             RemoteLogsCardFooter = "Remote logs found";
             LocalLogsCardFooter = "Local logs found";
             DiffLogsCardFooter = "Unregistered logs";
-            LogRootLocationPlaceholder = "No log location selected.";
+            LogRootLocationPlaceholder = String.IsNullOrEmpty(LogRootLocation) ? "No log location selected." : LogRootLocation;
             UsernamePlaceholder = "Username";
             PasswordPlaceholder = "Password";
             LoginButtonText = "Login";
             ArcFolderButtonText = "Select log folder";
             ApiStatusText = "Disconnected";
             UploadButtonText = "Start Uploading";
+        }
+
+        /// <summary>
+        /// Deserializes the user settings, and if settings exist
+        /// set the according properties.
+        /// </summary>
+        private void InitializeSettings()
+        {
+            _userSettings = _settingsService.DeserializeSettings();
+            LogRootLocation = _userSettings.DefaultArcFolderPath;
+
+            if (!String.IsNullOrEmpty(_userSettings.UsernameEncrypted) || !String.IsNullOrEmpty(_userSettings.PasswordEncrypted))
+            {
+                UsernameValue = _userSettings.Username;
+                _passwordValue = _userSettings.Password;
+            }
         }
 
         public void OnNavigatedTo()
@@ -162,7 +182,8 @@ namespace RPTClient.ViewModels
             {
                 LogRootLocation = _logDialogService.OpenArcFolderDialog();
             }
-            catch(Exception e){
+            catch (Exception e)
+            {
                 _dialogControl.Show("Error", "An error occurred while trying to set the arc folder path:\n" + e.ToString());
             }
         }
@@ -172,6 +193,11 @@ namespace RPTClient.ViewModels
         {
             try
             {
+                // Save new user settings.
+                _userSettings.Password = _passwordValue;
+                _userSettings.Username = UsernameValue;
+                _userSettings.DefaultArcFolderPath = LogRootLocation;
+
                 // Do an async login request to the server.
                 _performanceTrackerRepo.Login(UsernameValue, _passwordValue);
                 _passwordValue = string.Empty;
@@ -179,13 +205,15 @@ namespace RPTClient.ViewModels
                 // Show notification about successful login.
                 ApiStatusText = "Connected";
                 _snackbarService.Show("Login Service", "Successfully logged in.", SymbolRegular.AccessibilityCheckmark24);
-                
+
                 // Hide login UI elements. Show UI elements about connection to server.
                 LoginBarVisibility = Visibility.Collapsed;
                 UploadAgentBarVisibility = Visibility.Visible;
 
                 var task = _performanceTrackerRepo.GetRemoteLogCount();
                 RemoteLogCounter = await task;
+
+                _settingsService.SerializeSettings(_userSettings);
             }
             catch (Exception e)
             {
@@ -196,7 +224,7 @@ namespace RPTClient.ViewModels
         [ICommand]
         private void OnUpload()
         {
-            if(_uploadOn)
+            if (_uploadOn)
             {
                 _performanceTrackerRepo.StopFSWatcher();
                 _uploadOn = false;
@@ -207,7 +235,7 @@ namespace RPTClient.ViewModels
                 return;
             }
 
-            if(_logRootLocation == String.Empty)
+            if (_logRootLocation == String.Empty)
             {
                 _snackbarService.Show("Upload Service", "You need to specify your local arcdps log directory.", SymbolRegular.ErrorCircle24);
                 return;

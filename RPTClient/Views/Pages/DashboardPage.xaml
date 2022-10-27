@@ -24,7 +24,7 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
-        
+
         <!-- First Grid row definition -->
         <Grid Grid.Row="0" Grid.Column="0">
             <Grid.ColumnDefinitions>
@@ -48,9 +48,9 @@
                 </ui:TextBox>
                 <PasswordBox
                     Margin="0,0,10,0"
-                    MinWidth="150"
+                    MinWidth="150"                    
                     PasswordChanged="PasswordBox_PasswordChanged"
-                    KeyboardNavigation.TabIndex="1"
+                    KeyboardNavigation.TabIndex="1"                    
                 />
                 <ui:Button 
                     Content="{Binding ViewModel.LoginButtonText, Mode=OneWay}"
@@ -59,7 +59,7 @@
                     KeyboardNavigation.TabIndex="2">
                 </ui:Button>
             </DockPanel>
-            
+
             <!-- Connection Status Panel -->
             <DockPanel Grid.Row="0" Grid.Column="0" Visibility="{Binding ViewModel.UploadAgentBarVisibility}">
                 <ui:Card Margin="0,0,10,0" Width="{Binding Path=ActualWidth, ElementName=btnLogLocation}">
@@ -90,9 +90,9 @@
                     IsReadOnly="False"
                     Width="auto"
                     MinWidth="300"
-                    PlaceholderText="{Binding ViewModel.LogRootLocationPlaceholder, 
-                    Mode=OneWay}"
-                    Text="{Binding ViewModel.LogRootLocation, Mode=OneWay}">
+                    PlaceholderText="{Binding ViewModel.LogRootLocation, 
+                    Mode=TwoWay}"
+                    Text="{Binding ViewModel.LogRootLocation, Mode=TwoWay}">
                 </ui:TextBox>
             </DockPanel>
         </Grid>
@@ -135,7 +135,7 @@
                 </ui:Card.Footer>
             </ui:Card>
         </Grid>
-        
+
         <!-- Row three -->
         <Grid Grid.Row="2" Grid.Column="0" Margin="12,0,12,0">
             <Grid.RowDefinitions>
@@ -182,7 +182,7 @@
                         Text="Browse the local logs" />
                 </StackPanel>
             </ui:CardAction>
-            
+
             <ui:CardAction
                 Grid.Row="0"
                 Grid.Column="2"

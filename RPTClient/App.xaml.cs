@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RPTClient.Models;
 using RPTClient.Services;
+using RPTClient.Services.Contracts;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -46,7 +47,7 @@ namespace RPTClient
                 services.AddSingleton<ITaskBarService, TaskBarService>();
 
                 // Service containing navigation, same as INavigationWindow... but without window
-                services.AddSingleton<INavigationService, NavigationService>();
+                services.AddSingleton<INavigationService, NavigationService>();                
 
                 // Main window container with navigation
                 services.AddScoped<INavigationWindow, Views.Container>();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RPTClient.Services.Contracts;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using Wpf.Ui.Controls.Interfaces;
