@@ -43,17 +43,20 @@
                     Text="{Binding ViewModel.UsernameValue, Mode=TwoWay}"
                     PlaceholderText="{Binding ViewModel.UsernamePlaceholder, Mode=OneWay}"
                     MinWidth="150"
-                    Margin="0,0,10,0">
+                    Margin="0,0,10,0"
+                    KeyboardNavigation.TabIndex="0">
                 </ui:TextBox>
                 <PasswordBox
                     Margin="0,0,10,0"
                     MinWidth="150"
                     PasswordChanged="PasswordBox_PasswordChanged"
+                    KeyboardNavigation.TabIndex="1"
                 />
                 <ui:Button 
                     Content="{Binding ViewModel.LoginButtonText, Mode=OneWay}"
                     Command="{Binding ViewModel.OnLoginCommand, Mode=OneWay}"
-                    VerticalAlignment="Stretch">
+                    VerticalAlignment="Stretch"
+                    KeyboardNavigation.TabIndex="2">
                 </ui:Button>
             </DockPanel>
             
