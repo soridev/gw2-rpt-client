@@ -1,30 +1,28 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
+using RPTClient.ViewModels;
 using Wpf.Ui.Common.Interfaces;
-using Wpf.Ui.Controls;
 using Wpf.Ui.Mvvm.Contracts;
 
-namespace RPTClient.Views.Pages
+namespace RPTClient.Views.Pages;
+
+/// <summary>
+///     Interaction logic for DashboardPage.xaml
+/// </summary>
+public partial class DashboardPage : INavigableView<DashboardViewModel>
 {
-    /// <summary>
-    /// Interaction logic for DashboardPage.xaml
-    /// </summary>
-    public partial class DashboardPage : INavigableView<ViewModels.DashboardViewModel>
+    public DashboardPage(DashboardViewModel viewModel, IPageService pageService, ISnackbarService snackbarService,
+        IDialogService dialogService)
     {
-        public ViewModels.DashboardViewModel ViewModel
-        {
-            get;
-        }
+        ViewModel = viewModel;
 
-        public DashboardPage(ViewModels.DashboardViewModel viewModel, IPageService pageService, ISnackbarService snackbarService, IDialogService dialogService)
-        {
-            ViewModel = viewModel;
+        InitializeComponent();
+    }
 
-            InitializeComponent();
-        }
+    public DashboardViewModel ViewModel { get; }
 
-        private void PasswordBox_PasswordChanged(object sender, System.Windows.RoutedEventArgs e)
-        {
-            ViewModel.SetPasswordValue(((System.Windows.Controls.PasswordBox)sender).Password);
-        }
+    private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+    {
+        ViewModel.SetPasswordValue(((PasswordBox)sender).Password);
     }
 }
