@@ -92,8 +92,8 @@ public class ArcFileSystemWatcher
         throw new Exception(string.Format("An error occurred while handling filesystem events: {0}", e.ToString()));
     }
 
-    private void UploadFile(string pathToFile)
+    private async void UploadFile(string pathToFile)
     {
-        _restApi.Upload(pathToFile);
+        await _restApi.Upload(pathToFile);
     }
 }
