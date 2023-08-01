@@ -20,9 +20,9 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
         <!-- First Grid row definition -->
@@ -32,47 +32,44 @@
                 <ColumnDefinition Width="3*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
 
             <!-- Login Panel -->
             <DockPanel Grid.Row="0" Grid.Column="0" Visibility="{Binding ViewModel.LoginBarVisibility, Mode=OneWay}">
-                <ui:TextBox 
+                <ui:TextBox
                     Text="{Binding ViewModel.UsernameValue, Mode=TwoWay}"
                     PlaceholderText="{Binding ViewModel.UsernamePlaceholder, Mode=OneWay}"
                     MinWidth="150"
                     Margin="0,0,10,0"
-                    KeyboardNavigation.TabIndex="0">
-                </ui:TextBox>
+                    KeyboardNavigation.TabIndex="0" />
                 <PasswordBox
                     Margin="0,0,10,0"
-                    MinWidth="150"                    
+                    MinWidth="150"
                     PasswordChanged="PasswordBox_PasswordChanged"
-                    KeyboardNavigation.TabIndex="1"                    
-                />
-                <ui:Button 
+                    KeyboardNavigation.TabIndex="1" />
+                <ui:Button
                     Content="{Binding ViewModel.LoginButtonText, Mode=OneWay}"
                     Command="{Binding ViewModel.OnLoginCommand, Mode=OneWay}"
                     VerticalAlignment="Stretch"
-                    KeyboardNavigation.TabIndex="2">
-                </ui:Button>
+                    KeyboardNavigation.TabIndex="2" />
             </DockPanel>
 
             <!-- Connection Status Panel -->
             <DockPanel Grid.Row="0" Grid.Column="0" Visibility="{Binding ViewModel.UploadAgentBarVisibility}">
                 <ui:Card Margin="0,0,10,0" Width="{Binding Path=ActualWidth, ElementName=btnLogLocation}">
                     <ui:Card.Content>
-                        <TextBlock FontWeight="Bold" Foreground="{DynamicResource PaletteLightGreenBrush}" Text="{Binding ViewModel.ApiStatusText, Mode=OneWay}"></TextBlock>
+                        <TextBlock FontWeight="Bold" Foreground="{DynamicResource PaletteLightGreenBrush}"
+                                   Text="{Binding ViewModel.ApiStatusText, Mode=OneWay}" />
                     </ui:Card.Content>
                 </ui:Card>
-                <ui:Button 
+                <ui:Button
                     FontWeight="Bold"
                     Content="{Binding ViewModel.UploadButtonText}"
                     Command="{Binding ViewModel.OnUploadCommand, Mode=OneWay}"
-                    VerticalAlignment="Stretch">
-                </ui:Button>
+                    VerticalAlignment="Stretch" />
             </DockPanel>
 
             <DockPanel Grid.Row="1" Grid.Column="0" Margin="0,10,0,0">
@@ -82,18 +79,16 @@
                     Command="{Binding ViewModel.OnOpenFileDialogCommand, Mode=OneWay}"
                     Content="{Binding ViewModel.ArcFolderButtonText, Mode=OneWay}"
                     VerticalAlignment="Stretch"
-                    Icon="Folder24"
-                    />
+                    Icon="Folder24" />
 
-                <ui:TextBox 
+                <ui:TextBox
                     HorizontalAlignment="Left"
                     IsReadOnly="False"
                     Width="auto"
                     MinWidth="300"
                     PlaceholderText="{Binding ViewModel.LogRootLocation, 
                     Mode=TwoWay}"
-                    Text="{Binding ViewModel.LogRootLocation, Mode=TwoWay}">
-                </ui:TextBox>
+                    Text="{Binding ViewModel.LogRootLocation, Mode=TwoWay}" />
             </DockPanel>
         </Grid>
 
@@ -107,31 +102,40 @@
                 <ColumnDefinition Width="2*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
-            <ui:Card Grid.Row="0" Grid.Column="1" Margin="0,0,5,10" BorderBrush="{DynamicResource PaletteLightGreenBrush}" BorderThickness="1">
+            <ui:Card Grid.Row="0" Grid.Column="1" Margin="0,0,5,10"
+                     BorderBrush="{DynamicResource PaletteLightGreenBrush}" BorderThickness="1">
                 <ui:Card.Content>
-                    <TextBlock Text="{Binding ViewModel.RemoteLogCounter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding ViewModel.RemoteLogCounter, Mode=OneWay}" VerticalAlignment="Center"
+                               HorizontalAlignment="Center" FontWeight="Bold" />
                 </ui:Card.Content>
                 <ui:Card.Footer>
-                    <TextBlock Text="{Binding ViewModel.RemoteLogsCardFooter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                    <TextBlock Text="{Binding ViewModel.RemoteLogsCardFooter, Mode=OneWay}" VerticalAlignment="Center"
+                               HorizontalAlignment="Center" />
                 </ui:Card.Footer>
             </ui:Card>
-            <ui:Card Grid.Row="0" Grid.Column="2" Margin="0,0,5,10" BorderBrush="{DynamicResource PaletteLightBlueBrush}" BorderThickness="1">
+            <ui:Card Grid.Row="0" Grid.Column="2" Margin="0,0,5,10"
+                     BorderBrush="{DynamicResource PaletteLightBlueBrush}" BorderThickness="1">
                 <ui:Card.Content>
-                    <TextBlock Text="{Binding ViewModel.LocalLogCounter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding ViewModel.LocalLogCounter, Mode=OneWay}" VerticalAlignment="Center"
+                               HorizontalAlignment="Center" FontWeight="Bold" />
                 </ui:Card.Content>
                 <ui:Card.Footer>
-                    <TextBlock Text="{Binding ViewModel.LocalLogsCardFooter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                    <TextBlock Text="{Binding ViewModel.LocalLogsCardFooter, Mode=OneWay}" VerticalAlignment="Center"
+                               HorizontalAlignment="Center" />
                 </ui:Card.Footer>
             </ui:Card>
-            <ui:Card Grid.Row="0" Grid.Column="3" Margin="0,0,5,10" BorderBrush="{DynamicResource PaletteRedBrush}"  BorderThickness="1">
+            <ui:Card Grid.Row="0" Grid.Column="3" Margin="0,0,5,10" BorderBrush="{DynamicResource PaletteRedBrush}"
+                     BorderThickness="1">
                 <ui:Card.Content>
-                    <TextBlock Text="{Binding ViewModel.DiffLogCounter, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding ViewModel.DiffLogCounter, Mode=OneWay}" VerticalAlignment="Center"
+                               HorizontalAlignment="Center" FontWeight="Bold" />
                 </ui:Card.Content>
                 <ui:Card.Footer>
-                    <TextBlock Text="{Binding ViewModel.DiffLogsCardFooter}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                    <TextBlock Text="{Binding ViewModel.DiffLogsCardFooter}" VerticalAlignment="Center"
+                               HorizontalAlignment="Center" />
                 </ui:Card.Footer>
             </ui:Card>
         </Grid>

@@ -1,34 +1,30 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using Wpf.Ui.Appearance;
 
-namespace RPTClient.Helpers
+namespace RPTClient.Helpers;
+
+internal class EnumToBooleanConverter : IValueConverter
 {
-    internal class EnumToBooleanConverter : IValueConverter
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        public EnumToBooleanConverter()
-        {
-        }
+        if (parameter is not string enumString)
+            throw new ArgumentException("ExceptionEnumToBooleanConverterParameterMustBeAnEnumName");
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (parameter is not String enumString)
-                throw new ArgumentException("ExceptionEnumToBooleanConverterParameterMustBeAnEnumName");
+        if (!Enum.IsDefined(typeof(ThemeType), value))
+            throw new ArgumentException("ExceptionEnumToBooleanConverterValueMustBeAnEnum");
 
-            if (!Enum.IsDefined(typeof(Wpf.Ui.Appearance.ThemeType), value))
-                throw new ArgumentException("ExceptionEnumToBooleanConverterValueMustBeAnEnum");
+        var enumValue = Enum.Parse(typeof(ThemeType), enumString);
 
-            var enumValue = Enum.Parse(typeof(Wpf.Ui.Appearance.ThemeType), enumString);
+        return enumValue.Equals(value);
+    }
 
-            return enumValue.Equals(value);
-        }
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (parameter is not string enumString)
+            throw new ArgumentException("ExceptionEnumToBooleanConverterParameterMustBeAnEnumName");
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (parameter is not String enumString)
-                throw new ArgumentException("ExceptionEnumToBooleanConverterParameterMustBeAnEnumName");
-
-            return Enum.Parse(typeof(Wpf.Ui.Appearance.ThemeType), enumString);
-        }
+        return Enum.Parse(typeof(ThemeType), enumString);
     }
 }

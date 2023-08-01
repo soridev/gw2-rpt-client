@@ -1,139 +1,142 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Reflection;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using RPTClient.Models;
 using RPTClient.Services;
 using RPTClient.Services.Contracts;
-using System;
-using System.Windows.Input;
+using Wpf.Ui.Appearance;
 using Wpf.Ui.Common.Interfaces;
 using Wpf.Ui.Controls.Interfaces;
 using Wpf.Ui.Mvvm.Contracts;
 
-namespace RPTClient.ViewModels
+namespace RPTClient.ViewModels;
+
+public partial class SettingsViewModel : ObservableObject, INavigationAware
 {
-    public partial class SettingsViewModel : ObservableObject, INavigationAware
+    #region controls
+
+    private readonly IDialogControl _dialogControl;
+
+    #endregion
+
+    private bool _isInitialized;
+
+    public SettingsViewModel(IDialogService dialogService)
     {
-        private bool _isInitialized = false;
-        #region Properties
-        [ObservableProperty]
-        private string _logRootLocationPlaceholder = String.Empty;
+        _logDialogService = new LogDialogService();
+        _dialogControl = dialogService.GetDialogControl();
+        _settingsService = new SettingsService();
+    }
 
-        [ObservableProperty]
-        private string _appVersion = String.Empty;
+    public void OnNavigatedTo()
+    {
+        if (!_isInitialized)
+            InitializeViewModel();
+    }
 
-        [ObservableProperty]
-        private string _arcFolderButtonText = String.Empty;
+    public void OnNavigatedFrom()
+    {
+    }
 
-        [ObservableProperty]
-        private Wpf.Ui.Appearance.ThemeType _currentTheme = Wpf.Ui.Appearance.ThemeType.Unknown;
-        [ObservableProperty]
-        private UserSettings _userSettings = new UserSettings();
-        #endregion
-        #region Services
-        private ILogDialogService _logDialogService;
-        private ISettingsService _settingsService;
-        #endregion
-        #region controls
+    private void InitializeViewModel()
+    {
+        CurrentTheme = Theme.GetAppTheme();
+        AppVersion = $"RPTClient - {GetAssemblyVersion()}";
+        ArcFolderButtonText = "Select folder selected";
+        LogRootLocationPlaceholder = "No log location selected.";
 
-        private IDialogControl _dialogControl;
+        LoadSettings();
 
-        #endregion
+        _isInitialized = true;
+    }
 
-        public SettingsViewModel(IDialogService dialogService)
+    private string GetAssemblyVersion()
+    {
+        return Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? string.Empty;
+    }
+
+    [ICommand]
+    private void OnChangeTheme(string parameter)
+    {
+        switch (parameter)
         {
-            _logDialogService = new LogDialogService();
-            _dialogControl = dialogService.GetDialogControl();
-            _settingsService = new SettingsService();
-        }
-
-        public void OnNavigatedTo()
-        {
-            if (!_isInitialized)
-                InitializeViewModel();
-        }
-
-        public void OnNavigatedFrom()
-        {
-        }
-
-        private void InitializeViewModel()
-        {
-            CurrentTheme = Wpf.Ui.Appearance.Theme.GetAppTheme();
-            AppVersion = $"RPTClient - {GetAssemblyVersion()}";
-            ArcFolderButtonText = "Select folder selected";
-            LogRootLocationPlaceholder = "No log location selected.";
-
-            this.LoadSettings();
-
-            _isInitialized = true;
-        }
-
-        private string GetAssemblyVersion()
-        {
-            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? String.Empty;
-        }
-
-        [ICommand]
-        private void OnChangeTheme(string parameter)
-        {
-            switch (parameter)
-            {
-                case "theme_light":
-                    if (CurrentTheme == Wpf.Ui.Appearance.ThemeType.Light)
-                        break;
-
-                    Wpf.Ui.Appearance.Theme.Apply(Wpf.Ui.Appearance.ThemeType.Light);
-                    CurrentTheme = Wpf.Ui.Appearance.ThemeType.Light;
-
+            case "theme_light":
+                if (CurrentTheme == ThemeType.Light)
                     break;
 
-                default:
-                    if (CurrentTheme == Wpf.Ui.Appearance.ThemeType.Dark)
-                        break;
+                Theme.Apply(ThemeType.Light);
+                CurrentTheme = ThemeType.Light;
 
-                    Wpf.Ui.Appearance.Theme.Apply(Wpf.Ui.Appearance.ThemeType.Dark);
-                    CurrentTheme = Wpf.Ui.Appearance.ThemeType.Dark;
+                break;
 
+            default:
+                if (CurrentTheme == ThemeType.Dark)
                     break;
-            }
-        }
 
-        [ICommand]
-        private void OnOpenFileDialog()
-        {
-            try
-            {
-                _userSettings.DefaultArcFolderPath = _logDialogService.OpenArcFolderDialog();
-            }
-            catch (Exception e)
-            {
-                _dialogControl.Show("Error", "An error occurred while trying to set the arc folder path:\n" + e.ToString());
-            }
-        }
+                Theme.Apply(ThemeType.Dark);
+                CurrentTheme = ThemeType.Dark;
 
-        [ICommand]
-        private void SaveSettings()
-        {
-            try
-            {
-                _settingsService.SerializeSettings(UserSettings);
-            }
-            catch (Exception e)
-            {
-                _dialogControl.Show("Error", "An error occurred while trying to save the settings:\n" + e.ToString());
-            }
-        }
-        
-        private void LoadSettings()
-        {
-            try
-            {
-                _userSettings = _settingsService.DeserializeSettings();
-            }
-            catch (Exception e)
-            {
-                _dialogControl.Show("Error", "An error occurred while trying to load the settings:\n" + e.ToString());
-            }
+                break;
         }
     }
+
+    [ICommand]
+    private void OnOpenFileDialog()
+    {
+        try
+        {
+            _userSettings.DefaultArcFolderPath = _logDialogService.OpenArcFolderDialog();
+        }
+        catch (Exception e)
+        {
+            _dialogControl.Show("Error", "An error occurred while trying to set the arc folder path:\n" + e);
+        }
+    }
+
+    [ICommand]
+    private void SaveSettings()
+    {
+        try
+        {
+            _settingsService.SerializeSettings(UserSettings);
+        }
+        catch (Exception e)
+        {
+            _dialogControl.Show("Error", "An error occurred while trying to save the settings:\n" + e);
+        }
+    }
+
+    private void LoadSettings()
+    {
+        try
+        {
+            _userSettings = _settingsService.DeserializeSettings();
+        }
+        catch (Exception e)
+        {
+            _dialogControl.Show("Error", "An error occurred while trying to load the settings:\n" + e);
+        }
+    }
+
+    #region Properties
+
+    [ObservableProperty] private string _logRootLocationPlaceholder = string.Empty;
+
+    [ObservableProperty] private string _appVersion = string.Empty;
+
+    [ObservableProperty] private string _arcFolderButtonText = string.Empty;
+
+    [ObservableProperty] private ThemeType _currentTheme = ThemeType.Unknown;
+
+    [ObservableProperty] private UserSettings _userSettings = new();
+
+    #endregion
+
+    #region Services
+
+    private readonly ILogDialogService _logDialogService;
+    private readonly ISettingsService _settingsService;
+
+    #endregion
 }

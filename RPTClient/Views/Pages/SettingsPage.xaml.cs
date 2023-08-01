@@ -1,22 +1,19 @@
-﻿using Wpf.Ui.Common.Interfaces;
+﻿using RPTClient.ViewModels;
+using Wpf.Ui.Common.Interfaces;
 
-namespace RPTClient.Views.Pages
+namespace RPTClient.Views.Pages;
+
+/// <summary>
+///     Interaction logic for SettingsPage.xaml
+/// </summary>
+public partial class SettingsPage : INavigableView<SettingsViewModel>
 {
-    /// <summary>
-    /// Interaction logic for SettingsPage.xaml
-    /// </summary>
-    public partial class SettingsPage : INavigableView<ViewModels.SettingsViewModel>
+    public SettingsPage(SettingsViewModel viewModel)
     {
-        public ViewModels.SettingsViewModel ViewModel
-        {
-            get;
-        }
+        ViewModel = viewModel;
 
-        public SettingsPage(ViewModels.SettingsViewModel viewModel)
-        {
-            ViewModel = viewModel;
-
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
+
+    public SettingsViewModel ViewModel { get; }
 }

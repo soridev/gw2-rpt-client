@@ -1,20 +1,13 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using System.Threading.Tasks;
 using RPTClient.Filesystem;
 using RPTClient.Rest;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RPTClient.Repositories;
 
 public class PerformanceTrackerRepository
 {
-    private PerformanceTrackerRest _performanceTrackerRest;
     private ArcFileSystemWatcher? _arcFileSystemWatcher;
+    private readonly PerformanceTrackerRest _performanceTrackerRest;
 
     public PerformanceTrackerRepository()
     {

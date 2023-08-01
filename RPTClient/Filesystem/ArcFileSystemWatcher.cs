@@ -1,23 +1,19 @@
-﻿using RPTClient.Rest;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RPTClient.Rest;
 
 namespace RPTClient.Filesystem;
 
 public class ArcFileSystemWatcher
 {
-    private string _rootLogLocation;
-    private bool _compressionEnabled;
-    private PerformanceTrackerRest _restApi;
+    private readonly bool _compressionEnabled;
     private FileSystemWatcher? _fsWatcher;
+    private readonly PerformanceTrackerRest _restApi;
+    private readonly string _rootLogLocation;
 
-    public ArcFileSystemWatcher(string rootLogLocation, bool compressionEnabled, PerformanceTrackerRest performanceTrackerRest)
+    public ArcFileSystemWatcher(string rootLogLocation, bool compressionEnabled,
+        PerformanceTrackerRest performanceTrackerRest)
     {
         _rootLogLocation = rootLogLocation;
         _compressionEnabled = compressionEnabled;
@@ -27,12 +23,10 @@ public class ArcFileSystemWatcher
     public void StartFilesystemWatcher()
     {
         if (!Directory.Exists(_rootLogLocation))
-        {
             throw new DirectoryNotFoundException("The given root directory for the arc logs does not exists.");
-        }
 
         _fsWatcher = new FileSystemWatcher(_rootLogLocation);
-        
+
         _fsWatcher.Changed += OnChanged;
         _fsWatcher.Created += OnCreated;
         _fsWatcher.Deleted += OnDeleted;
@@ -40,13 +34,9 @@ public class ArcFileSystemWatcher
         _fsWatcher.Error += OnError;
 
         if (_compressionEnabled)
-        {
             _fsWatcher.Filter = "*.zevtc";
-        }
         else
-        {
             _fsWatcher.Filter = "*.evtc";
-        }
 
         _fsWatcher.IncludeSubdirectories = true;
         _fsWatcher.EnableRaisingEvents = true;
@@ -68,9 +58,9 @@ public class ArcFileSystemWatcher
 
     private void OnCreated(object sender, FileSystemEventArgs e)
     {
-        Debug.WriteLine("Created event triggered for  file: " + e.FullPath.ToString());
+        Debug.WriteLine("Created event triggered for  file: " + e.FullPath);
 
-        string fullLocalPath = e.FullPath;
+        var fullLocalPath = e.FullPath;
         UploadFile(fullLocalPath);
     }
 
@@ -81,15 +71,15 @@ public class ArcFileSystemWatcher
 
     private void OnRenamed(object sender, FileSystemEventArgs e)
     {
-        Debug.WriteLine("Renamed event triggered for  file: " + e.FullPath.ToString());
+        Debug.WriteLine("Renamed event triggered for  file: " + e.FullPath);
 
-        string fullLocalPath = e.FullPath;
+        var fullLocalPath = e.FullPath;
         UploadFile(fullLocalPath);
     }
 
     private void OnError(object sender, ErrorEventArgs e)
     {
-        throw new Exception(string.Format("An error occurred while handling filesystem events: {0}", e.ToString()));
+        throw new Exception(string.Format("An error occurred while handling filesystem events: {0}", e));
     }
 
     private async void UploadFile(string pathToFile)
