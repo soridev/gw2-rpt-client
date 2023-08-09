@@ -14,14 +14,24 @@ namespace RPTClient.ViewModels;
 
 public partial class SettingsViewModel : ObservableObject, INavigationAware
 {
-    #region controls
-
-    private readonly IDialogControl _dialogControl;
-
-    #endregion
-
+    
+    // internals
+    private readonly IDialogControl _dialogControl;    
     private bool _isInitialized;
 
+    // Properties
+    [ObservableProperty] private string _logRootLocationPlaceholder = string.Empty;
+    [ObservableProperty] private string _logRootLocation = string.Empty;
+    [ObservableProperty] private string _discordWebhookUrl = string.Empty;
+    [ObservableProperty] private string _appVersion = string.Empty;
+    [ObservableProperty] private string _arcFolderButtonText = string.Empty;
+    [ObservableProperty] private ThemeType _currentTheme = ThemeType.Unknown;
+    [ObservableProperty] private UserSettings _userSettings = new UserSettings();
+    
+    // Services
+    private readonly ILogDialogService _logDialogService;
+    private readonly ISettingsService _settingsService;
+    
     public SettingsViewModel(IDialogService dialogService)
     {
         _logDialogService = new LogDialogService();
@@ -86,7 +96,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     {
         try
         {
-            _userSettings.DefaultArcFolderPath = _logDialogService.OpenArcFolderDialog();
+            LogRootLocation = _logDialogService.OpenArcFolderDialog();
         }
         catch (Exception e)
         {
@@ -99,6 +109,10 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     {
         try
         {
+            // set all the values in the settings object.
+            UserSettings.DefaultArcFolderPath = LogRootLocation;
+            UserSettings.DiscordWebhookUrl = DiscordWebhookUrl;
+
             _settingsService.SerializeSettings(UserSettings);
         }
         catch (Exception e)
@@ -112,31 +126,19 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         try
         {
             _userSettings = _settingsService.DeserializeSettings();
+
+            if (UserSettings.DefaultArcFolderPath != null)
+            {
+                LogRootLocation = _userSettings.DefaultArcFolderPath;
+            }
+            if (!String.IsNullOrEmpty(UserSettings.DiscordWebhookUrl))
+            {
+                DiscordWebhookUrl = UserSettings.DiscordWebhookUrl;
+            }            
         }
         catch (Exception e)
         {
             _dialogControl.Show("Error", "An error occurred while trying to load the settings:\n" + e);
         }
-    }
-
-    #region Properties
-
-    [ObservableProperty] private string _logRootLocationPlaceholder = string.Empty;
-
-    [ObservableProperty] private string _appVersion = string.Empty;
-
-    [ObservableProperty] private string _arcFolderButtonText = string.Empty;
-
-    [ObservableProperty] private ThemeType _currentTheme = ThemeType.Unknown;
-
-    [ObservableProperty] private UserSettings _userSettings = new();
-
-    #endregion
-
-    #region Services
-
-    private readonly ILogDialogService _logDialogService;
-    private readonly ISettingsService _settingsService;
-
-    #endregion
+    }    
 }

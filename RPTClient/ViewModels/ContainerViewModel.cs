@@ -45,6 +45,13 @@ public partial class ContainerViewModel : ObservableObject
                 PageTag = "data",
                 Icon = SymbolRegular.DataHistogram24,
                 PageType = typeof(DataPage)
+            },
+            new NavigationItem
+            {
+                Content = "Discord",
+                PageTag = "discord",
+                Icon = SymbolRegular.Hourglass24,
+                PageType = typeof(DiscordPage)
             }
         };
 

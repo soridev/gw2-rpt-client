@@ -16,4 +16,9 @@ public partial class SettingsPage : INavigableView<SettingsViewModel>
     }
 
     public SettingsViewModel ViewModel { get; }
+
+    private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+    {
+
+    }
 }

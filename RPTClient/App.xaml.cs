@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
@@ -25,10 +26,10 @@ public partial class App
     // https://docs.microsoft.com/dotnet/core/extensions/dependency-injection
     // https://docs.microsoft.com/dotnet/core/extensions/configuration
     // https://docs.microsoft.com/dotnet/core/extensions/logging
+
     private static readonly IHost _host = Host
         .CreateDefaultBuilder()
-        .ConfigureAppConfiguration(
-            c => { c.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)); })
+        .ConfigureAppConfiguration(c => { c.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)); })
         .ConfigureServices((context, services) =>
         {
             // App Host
@@ -61,6 +62,8 @@ public partial class App
             services.AddScoped<DashboardViewModel>();
             services.AddScoped<DataPage>();
             services.AddScoped<DataViewModel>();
+            services.AddScoped<DiscordPage>();
+            services.AddScoped<DiscordViewModel>();
             services.AddScoped<SettingsPage>();
             services.AddScoped<SettingsViewModel>();
 

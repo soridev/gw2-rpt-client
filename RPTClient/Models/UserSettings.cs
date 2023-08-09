@@ -15,6 +15,8 @@ public class UserSettings
 
     public string DefaultArcFolderPath { get; set; } = string.Empty;
 
+    public string DiscordWebhookUrl { get; set; } = string.Empty;
+
     [JsonIgnore]
     public string Username
     {

@@ -16,7 +16,78 @@
     mc:Ignorable="d">
     <ui:UiPage.Resources>
     </ui:UiPage.Resources>
-    <Grid Margin="56,0">
+
+    <VirtualizingStackPanel
+        x:Name="RootPanel"
+        Margin="56,0,18,18"
+        IsVirtualizing="True"
+        VirtualizationMode="Recycling">
+
+        <DockPanel>
+            <TextBlock
+                    FontSize="20"
+                    FontWeight="Medium"
+                    Text="General" />
+        </DockPanel>
+
+        
+        <!-- Arcdps log folder -->
+        <DockPanel Margin="0,10,0,0">
+            <TextBlock
+                    FontSize="15"
+                    FontWeight="Light"
+                    Text="Arcdps log folder" />
+        </DockPanel>
+
+        <DockPanel Margin="0,10,0,0">
+            <ui:Button
+                    x:Name="btnLogLocation"
+                    Margin="0, 0, 10, 0"
+                    VerticalAlignment="Stretch"
+                    Icon="Folder24"
+                    Command="{Binding ViewModel.OnOpenFileDialogCommand, Mode=OneWay}"
+                    Content="{Binding ViewModel.ArcFolderButtonText, Mode=OneWay}" />
+            <ui:TextBox
+                    HorizontalAlignment="Left"
+                    IsReadOnly="False"
+                    Width="auto"
+                    MinWidth="300"
+                    PlaceholderText="{Binding ViewModel.LogRootLocationPlaceholder, Mode=OneWay}"
+                    Text="{Binding ViewModel.LogRootLocation, Mode=OneWay}" />
+        </DockPanel>
+
+        <!-- Discord Webhook -->
+        <DockPanel Margin="0,10,0,0">
+            <TextBlock
+                    FontSize="15"
+                    FontWeight="Light"
+                    Text="Discord Webhook URL" />
+        </DockPanel>
+        
+        <DockPanel Margin="0,10,0,0">
+            <ui:TextBox
+                HorizontalAlignment="Left"
+                IsReadOnly="False"
+                Width="auto"
+                MinWidth="350"
+                PlaceholderText="Discord Webhook URL (Optional)"
+                Text="{Binding ViewModel.DiscordWebhookUrl, Mode=OneWay}"/>
+        </DockPanel>
+
+        <!-- Safe Settings Button -->
+        <DockPanel Margin="0,10,0,0">
+            <ui:Button
+                Margin="0,0,10,0"
+                Content="Open Settings File"
+                Command="{Binding ViewModel.OpenSettingsFileCommand, Mode=OneWay}"/>
+            <ui:Button
+                Content="Save"
+                Command="{Binding ViewModel.SaveSettingsCommand, Mode=OneWay}" />
+        </DockPanel>
+    </VirtualizingStackPanel>
+
+
+    <!--<Grid Margin="56,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -36,34 +107,9 @@
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <DockPanel Grid.Row="0" Grid.Column="0">
-                <TextBlock
-                    FontSize="20"
-                    FontWeight="Medium"
-                    Text="General" />
-            </DockPanel>
-            <DockPanel Grid.Row="1" Grid.Column="0">
-                <TextBlock
-                    FontSize="15"
-                    FontWeight="Light"
-                    Text="Default path" />
-            </DockPanel>
-            <DockPanel Grid.Row="2" Grid.Column="0" Margin="0,10,0,0">
-                <ui:Button
-                    x:Name="btnLogLocation"
-                    Margin="0, 0, 10, 0"
-                    VerticalAlignment="Stretch"
-                    Icon="Folder24"
-                    Command="{Binding ViewModel.OnOpenFileDialogCommand, Mode=OneWay}"
-                    Content="{Binding ViewModel.ArcFolderButtonText, Mode=OneWay}" />
-                <ui:TextBox
-                    HorizontalAlignment="Left"
-                    IsReadOnly="False"
-                    Width="auto"
-                    MinWidth="300"
-                    PlaceholderText="{Binding ViewModel.LogRootLocationPlaceholder, Mode=OneWay}"
-                    Text="{Binding ViewModel.LogRootLocation, Mode=OneWay}" />
-            </DockPanel>
+            
+            
+           
         </Grid>
         <Grid Grid.Row="2" Grid.Column="0" Margin="0,10,0,0">
             <Grid.ColumnDefinitions>
@@ -72,13 +118,9 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
-            <DockPanel Grid.Row="0" Grid.Column="0">
-                <ui:Button
-                    Content="Save"
-                    Command="{Binding ViewModel.SaveSettingsCommand, Mode=OneWay}" />
-            </DockPanel>
+            
         </Grid>
-        <!--<StackPanel Margin="56,0">
+       <StackPanel Margin="56,0">
             <TextBlock
             FontSize="20"
             FontWeight="Medium"
@@ -106,5 +148,4 @@
             Text="About RPTClient" />
             <TextBlock Margin="0,12,0,0" Text="{Binding ViewModel.AppVersion, Mode=OneWay}" />
         </StackPanel>-->
-    </Grid>
 </ui:UiPage>
